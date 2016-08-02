@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Block] (
+    [Id]     INT IDENTITY (1, 1) NOT NULL,
+    [FormId] INT NOT NULL,
+    CONSTRAINT [PK_Bloc] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Bloc] FOREIGN KEY ([FormId]) REFERENCES [dbo].[Form] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+

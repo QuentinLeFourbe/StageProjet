@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SatisfaTableModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Answer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PossibleAnswerId" Type="Int32" Nullable="false" />
+    <Property Name="QuestionId" Type="Int32" />
+    <Property Name="UserAnswer" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PossibleAnswer" Relationship="Self.FK_Answer_PossibleAnswer" FromRole="Answer" ToRole="PossibleAnswer" />
+    <NavigationProperty Name="Question" Relationship="Self.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
+  </EntityType>
+  <EntityType Name="Block">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="FormId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Form" Relationship="Self.FK_Bloc" FromRole="Block" ToRole="Form" />
+    <NavigationProperty Name="Question" Relationship="Self.FK_Question_Bloc" FromRole="Block" ToRole="Question" />
+  </EntityType>
+  <EntityType Name="Form">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Nom" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="DateCreation" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="Block" Relationship="Self.FK_Bloc" FromRole="Form" ToRole="Block" />
+    <NavigationProperty Name="Session" Relationship="Self.FK_Session_Form" FromRole="Form" ToRole="Session" />
+  </EntityType>
+  <EntityType Name="PossibleAnswer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="QuestionId" Type="Int32" Nullable="false" />
+    <Property Name="Title" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Answer" Relationship="Self.FK_Answer_PossibleAnswer" FromRole="PossibleAnswer" ToRole="Answer" />
+    <NavigationProperty Name="Question" Relationship="Self.FK_PossibleAnswer_Question" FromRole="PossibleAnswer" ToRole="Question" />
+  </EntityType>
+  <EntityType Name="Question">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Type" Type="Int32" Nullable="false" />
+    <Property Name="BlockId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Answer" Relationship="Self.FK_Answer_Question" FromRole="Question" ToRole="Answer" />
+    <NavigationProperty Name="Block" Relationship="Self.FK_Question_Bloc" FromRole="Question" ToRole="Block" />
+    <NavigationProperty Name="PossibleAnswer" Relationship="Self.FK_PossibleAnswer_Question" FromRole="Question" ToRole="PossibleAnswer" />
+  </EntityType>
+  <EntityType Name="Session">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="FormId" Type="Int32" />
+    <NavigationProperty Name="Form" Relationship="Self.FK_Session_Form" FromRole="Session" ToRole="Form" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Username" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Answer_PossibleAnswer">
+    <End Role="PossibleAnswer" Type="Self.PossibleAnswer" Multiplicity="1" />
+    <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PossibleAnswer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Answer">
+        <PropertyRef Name="PossibleAnswerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Answer_Question">
+    <End Role="Question" Type="Self.Question" Multiplicity="0..1" />
+    <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Answer">
+        <PropertyRef Name="QuestionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Bloc">
+    <End Role="Form" Type="Self.Form" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Block" Type="Self.Block" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Form">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Block">
+        <PropertyRef Name="FormId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Question_Bloc">
+    <End Role="Block" Type="Self.Block" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Question" Type="Self.Question" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Block">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Question">
+        <PropertyRef Name="BlockId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Session_Form">
+    <End Role="Form" Type="Self.Form" Multiplicity="0..1" />
+    <End Role="Session" Type="Self.Session" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Form">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Session">
+        <PropertyRef Name="FormId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PossibleAnswer_Question">
+    <End Role="Question" Type="Self.Question" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PossibleAnswer" Type="Self.PossibleAnswer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PossibleAnswer">
+        <PropertyRef Name="QuestionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SatisfaTableEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Answer" EntityType="Self.Answer" />
+    <EntitySet Name="Block" EntityType="Self.Block" />
+    <EntitySet Name="Form" EntityType="Self.Form" />
+    <EntitySet Name="PossibleAnswer" EntityType="Self.PossibleAnswer" />
+    <EntitySet Name="Question" EntityType="Self.Question" />
+    <EntitySet Name="Session" EntityType="Self.Session" />
+    <EntitySet Name="User" EntityType="Self.User" />
+    <AssociationSet Name="FK_Answer_PossibleAnswer" Association="Self.FK_Answer_PossibleAnswer">
+      <End Role="PossibleAnswer" EntitySet="PossibleAnswer" />
+      <End Role="Answer" EntitySet="Answer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Answer_Question" Association="Self.FK_Answer_Question">
+      <End Role="Question" EntitySet="Question" />
+      <End Role="Answer" EntitySet="Answer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bloc" Association="Self.FK_Bloc">
+      <End Role="Form" EntitySet="Form" />
+      <End Role="Block" EntitySet="Block" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Question_Bloc" Association="Self.FK_Question_Bloc">
+      <End Role="Block" EntitySet="Block" />
+      <End Role="Question" EntitySet="Question" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Session_Form" Association="Self.FK_Session_Form">
+      <End Role="Form" EntitySet="Form" />
+      <End Role="Session" EntitySet="Session" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PossibleAnswer_Question" Association="Self.FK_PossibleAnswer_Question">
+      <End Role="Question" EntitySet="Question" />
+      <End Role="PossibleAnswer" EntitySet="PossibleAnswer" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

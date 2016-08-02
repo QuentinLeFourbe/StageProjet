@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SatisfaTableModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="SatisfaTableModelStoreContainer">
+    <EntitySet Name="Answer" EntityType="SatisfaTableModel.Store.Answer" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Block" EntityType="SatisfaTableModel.Store.Block" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Form" EntityType="SatisfaTableModel.Store.Form" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PossibleAnswer" EntityType="SatisfaTableModel.Store.PossibleAnswer" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Question" EntityType="SatisfaTableModel.Store.Question" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Session" EntityType="SatisfaTableModel.Store.Session" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="User" EntityType="SatisfaTableModel.Store.User" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Answer_PossibleAnswer" Association="SatisfaTableModel.Store.FK_Answer_PossibleAnswer">
+      <End Role="PossibleAnswer" EntitySet="PossibleAnswer" />
+      <End Role="Answer" EntitySet="Answer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Answer_Question" Association="SatisfaTableModel.Store.FK_Answer_Question">
+      <End Role="Question" EntitySet="Question" />
+      <End Role="Answer" EntitySet="Answer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bloc" Association="SatisfaTableModel.Store.FK_Bloc">
+      <End Role="Form" EntitySet="Form" />
+      <End Role="Block" EntitySet="Block" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Question_Bloc" Association="SatisfaTableModel.Store.FK_Question_Bloc">
+      <End Role="Block" EntitySet="Block" />
+      <End Role="Question" EntitySet="Question" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Session_Form" Association="SatisfaTableModel.Store.FK_Session_Form">
+      <End Role="Form" EntitySet="Form" />
+      <End Role="Session" EntitySet="Session" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PossibleAnswer_Question" Association="SatisfaTableModel.Store.FK_PossibleAnswer_Question">
+      <End Role="Question" EntitySet="Question" />
+      <End Role="PossibleAnswer" EntitySet="PossibleAnswer" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Answer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PossibleAnswerId" Type="int" Nullable="false" />
+    <Property Name="QuestionId" Type="int" Nullable="true" />
+    <Property Name="UserAnswer" Type="nvarchar" Nullable="true" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="Block">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="FormId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Form">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Nom" Type="nchar" Nullable="false" MaxLength="50" />
+    <Property Name="DateCreation" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PossibleAnswer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="QuestionId" Type="int" Nullable="false" />
+    <Property Name="Title" Type="nchar" Nullable="true" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="Question">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Title" Type="nchar" Nullable="false" MaxLength="50" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="BlockId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Session">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nchar" Nullable="false" MaxLength="50" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="FormId" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Username" Type="nchar" Nullable="false" MaxLength="30" />
+    <Property Name="Password" Type="nchar" Nullable="false" MaxLength="30" />
+  </EntityType>
+  <Association Name="FK_Answer_PossibleAnswer">
+    <End Role="PossibleAnswer" Type="SatisfaTableModel.Store.PossibleAnswer" Multiplicity="1" />
+    <End Role="Answer" Type="SatisfaTableModel.Store.Answer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PossibleAnswer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Answer">
+        <PropertyRef Name="PossibleAnswerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Answer_Question">
+    <End Role="Question" Type="SatisfaTableModel.Store.Question" Multiplicity="0..1" />
+    <End Role="Answer" Type="SatisfaTableModel.Store.Answer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Answer">
+        <PropertyRef Name="QuestionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Bloc">
+    <End Role="Form" Type="SatisfaTableModel.Store.Form" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Block" Type="SatisfaTableModel.Store.Block" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Form">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Block">
+        <PropertyRef Name="FormId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Question_Bloc">
+    <End Role="Block" Type="SatisfaTableModel.Store.Block" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Question" Type="SatisfaTableModel.Store.Question" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Block">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Question">
+        <PropertyRef Name="BlockId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Session_Form">
+    <End Role="Form" Type="SatisfaTableModel.Store.Form" Multiplicity="0..1" />
+    <End Role="Session" Type="SatisfaTableModel.Store.Session" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Form">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Session">
+        <PropertyRef Name="FormId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PossibleAnswer_Question">
+    <End Role="Question" Type="SatisfaTableModel.Store.Question" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PossibleAnswer" Type="SatisfaTableModel.Store.PossibleAnswer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PossibleAnswer">
+        <PropertyRef Name="QuestionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

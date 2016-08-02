@@ -1,0 +1,51 @@
+﻿@model FormProject.Models.Block
+
+@{
+    foreach (var question in Model.Question)
+    {
+        @*====================HEADING======================*@
+        <div class="panel-heading">
+            <div class="panel-title">
+                @Html.TextBoxFor(, null, new { @class = "form-control inputQuestion", placeholder = "Question" })
+            </div>
+        </div>
+
+        @*====================BODY=========================*@
+        <ul class="list-group">
+            @*QUESTION*@
+            <li class="list-group-item" id='question'>
+                <div class="row">
+                    <div class="typeQuestion">
+                        <div class="col-sm-8">
+                            @*TYPE DE QUESTION*@
+                            <div class="col-sm-4">
+                                @Html.Label("Type de réponse")
+                                <select name='Block[].Question[].Type' class="form-control form-group">
+                                    <option value="1">Texte</option>
+                                    <option value="2">QCM</option>
+                                    <option value="3">Cases à cocher</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-10 listAnswer hidden">
+                                <div class="form-inline form-group modelAnswer">
+                                    <div class="input-group">
+                                        @Html.TextBox("Block[].Question[].PossibleAnswer[].Title", null, new { @class = "form-control possibleAnswer", placeholder = "Réponse" })
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-addAnswer">
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+    }
+}
+
