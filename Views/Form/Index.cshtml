@@ -1,0 +1,37 @@
+﻿@model List<FormProject.Models.Form>
+
+
+<div class="col-sm-12">
+    <div class="panel-default">
+        <div class="panel-body">
+            @Html.ActionLink("Nouveau Formulaire", "NewForm", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+    <table class="table">
+        @{  if (Model == null)
+            {
+                @Html.Label("He y'a pas formulaire")
+            }
+            else
+            {
+                <tr>
+                    <td>@Html.Label("Nom")</td>
+                    <td>@Html.Label("Date")</td>
+                </tr>
+                foreach (var form in Model)
+                {
+                    <tr>
+                        <td>@form.Nom</td>
+                        <td>@form.DateCreation</td>
+                        <td>
+                            @Html.ActionLink("View", "ViewForm", new { id = form.Id })
+                            @Html.ActionLink("Edit", "NewForm", new { id = form.Id })
+                            @Html.ActionLink("Delete", "Delete", new { id = form.Id })
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+</div>
+

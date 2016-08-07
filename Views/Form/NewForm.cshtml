@@ -1,0 +1,153 @@
+﻿@model FormProject.ViewModels.FormViewModel
+@{
+    ViewBag.Title = "NewForm";
+}
+@using Newtonsoft.Json
+
+
+
+@*==============MODEL QUESTION===============*@
+<li class="list-group-item questionModel hidden" id="question">
+    @*===================SAISIE QUESTION==================*@
+    <div class="form-inline form-group">
+        <div class="input-group">
+            @Html.TextBox("Block[].Question[].Title", null, new { @class = "form-control inputQuestion", placeholder = "Question" })
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-primary btn-addQuestion">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-danger btn-delQuestion">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="typeQuestion">
+
+            <div class="col-sm-8">
+                @*TYPE DE QUESTION*@
+                <div class="col-sm-4">
+                    @Html.Label("Type de réponse")
+                    <select name="Block[].Question[].Type" class="form-control form-group">
+                        <option value=1>Texte</option>
+                        <option value=2>QCM</option>
+                        <option value=3>Cases à cocher</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-10 listAnswer hidden">
+                    <div class="form-inline form-group modelAnswer">
+                        <div class="input-group">
+                            @Html.TextBox("Block[].Question[].PossibleAnswer[].Title", null, new { @class = "form-control possibleAnswer", placeholder = "Réponse" })
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-success btn-addAnswer">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+@*==============MODEL BLOCK==================*@
+<div class="row blockModel  hidden" id="block">
+    <div class="col-sm-10 ">
+        <div class="panel panel-default">
+            @*====================HEADING======================*@
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <div class="form-inline">
+                        <div class="input-group">
+                            @Html.TextBox("Block[].Question[].Title", null, new { @class = "form-control inputQuestion", placeholder = "Question" })
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary btn-addQuestion mainQuestion">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-danger disabled btn-trash ">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*====================BODY=========================*@
+            <ul class="list-group">
+                @*QUESTION*@
+                <li class="list-group-item" id='question'>
+                    <div class="row">
+                        <div class="typeQuestion">
+                            <div class="col-sm-8">
+                                @*TYPE DE QUESTION*@
+                                <div class="col-sm-4">
+                                    @Html.Label("Type de réponse")
+                                    <select name='Block[].Question[].Type' class="form-control form-group">
+                                        <option value="1">Texte</option>
+                                        <option value="2">QCM</option>
+                                        <option value="3">Cases à cocher</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-10 listAnswer hidden">
+                                    <div class="form-inline form-group modelAnswer">
+                                        <div class="input-group">
+                                            @Html.TextBox("Block[].Question[].PossibleAnswer[].Title", null, new { @class = "form-control possibleAnswer", placeholder = "Réponse" })
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-success btn-addAnswer">
+                                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+</div>
+
+@*==============NEW FORM=====================*@
+<form class="form-horizontal" id="formForm" method="post">
+    <div class="row">
+        <div class="col-sm-3 form-group">
+            @Html.Label("Nom du formulaire")
+            @Html.TextBoxFor(m => m.Nom, null, new { @class = "form-control", id = "dateCrea" })
+        </div>
+    </div>
+
+    <div class="blocks">
+    </div>
+
+    <div class="row">
+        <div class="col-sm-10 form-group">
+            <button class="btn btn-primary" type="button" id="addBlock">
+                Nouveau block
+            </button>
+        </div>
+    </div>
+    <input id="creer" type="submit" value="Créer Formulaire" class="btn btn-warning" />
+</form>
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    var jsonMoche = "@Html.Raw(JsonConvert.SerializeObject(Model).Replace("\"", "\\\""))";
+    var model = JSON.parse(jsonMoche);
+</script>
+<script src="~/Scripts/newFormScript.js"></script>
+
+
+   
+
+

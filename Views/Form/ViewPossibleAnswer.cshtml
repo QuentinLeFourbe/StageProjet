@@ -1,0 +1,21 @@
+﻿@model FormProject.Models.Question
+
+
+@{
+    foreach (var answer in Model.PossibleAnswer)
+    {
+        if (Model.Type == 2)
+        {
+            <div class="checkbox disabled">
+                <label><input type="checkbox" value="" disabled>@Html.Raw(answer.Title)</label>
+            </div>
+        }
+        else if (Model.Type == 3)
+        {
+            <div class="radio disabled">
+                <label><input type="radio" name="optradio" disabled>@Html.Raw(answer.Title)</label>
+            </div>
+        }
+
+    }
+}
